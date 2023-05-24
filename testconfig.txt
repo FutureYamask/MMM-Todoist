@@ -1,0 +1,230 @@
+/* MagicMirror² Config Sample
+ *
+ * By Michael Teeuw https://michaelteeuw.nl
+ * MIT Licensed.
+ *
+ * For more information on how you can configure this file
+ * see https://docs.magicmirror.builders/configuration/introduction.html
+ * and https://docs.magicmirror.builders/modules/configuration.html
+ */
+let config = {
+	address: "localhost", 	// Address to listen on, can be:
+							// - "localhost", "127.0.0.1", "::1" to listen on loopback interface
+							// - another specific IPv4/6 to listen on a specific interface
+							// - "0.0.0.0", "::" to listen on any interface
+							// Default, when address config is left out or empty, is "localhost"
+	port: 8080,
+	basePath: "/", 	// The URL path where MagicMirror² is hosted. If you are using a Reverse proxy
+					// you must set the sub path here. basePath must end with a /
+	ipWhitelist: ["127.0.0.1", "::ffff:127.0.0.1", "::1"], 	// Set [] to allow all IP addresses
+															// or add a specific IPv4 of 192.168.1.5 :
+															// ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.1.5"],
+															// or IPv4 range of 192.168.3.0 --> 192.168.3.15 use CIDR format :
+															// ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.3.0/28"],
+
+	useHttps: false, 		// Support HTTPS or not, default "false" will use HTTP
+	httpsPrivateKey: "", 	// HTTPS private key path, only require when useHttps is true
+	httpsCertificate: "", 	// HTTPS Certificate path, only require when useHttps is true
+
+	language: "en",
+	locale: "en-US",
+	logLevel: ["INFO", "LOG", "WARN", "ERROR"], // Add "DEBUG" for even more logging
+	timeFormat: 12,
+	units: "imperial",
+	electronOptions: { fullscreen:false, width:1200, height:2000 },
+	// serverOnly:  true/false/"local" ,
+	// local for armv6l processors, default
+	//   starts serveronly and then starts chrome browser
+	// false, default for all NON-armv6l devices
+	// true, force serveronly mode, because you want to.. no UI on this device
+
+	modules: [
+
+		{
+			module: "updatenotification",
+			position: "top_bar"
+		},
+		{
+			module: "clock",
+			position: "top_left",
+			config: {
+				timezone: "America/New_York",
+				timeFormat: 12,
+				displaySeconds: false,
+				showPeriod: true,
+				dateFormat: "dddd, MMM D",
+			}
+		},
+		
+		{
+		module: 'MMM-SmartWebDisplay',
+		position: 'top_left',	// This can be any of the regions.
+		config: {
+			// See 'Configuration options' for more information.
+			// <iframe src="https://free.timeanddate.com/clock/i8pjklf3/n418/szw500/szh500/hoc999/hbw2/hfc000/cf100/hgr0/fas24/facddd/fdi70/mqc999/mql10/mqw6/mqd98/mhc999/mhl10/mhw6/mhd98/mmc999/mml6/mmw2/mmd98/hhc2a809f/hhs2/hhl60/hhw11/hmcd3b466/hms2/hml95/hmw11/hsv0" frameborder="0" width="500" height="500"></iframe>
+
+
+
+			logDebug: false, //set to true to get detailed debug logs. To see them : "Ctrl+Shift+i"
+			height:"500px", //hauteur du cadre en pixel ou %
+			width:"500px", //largeur
+            updateInterval: 0, //in min. Set it to 0 for no refresh (for videos)
+            NextURLInterval: 0, //in min, set it to 0 not to have automatic URL change. If only 1 URL given, it will be updated
+            url: ["https://free.timeanddate.com/clock/i8pjklf3/n418/szw500/szh500/hoc999/hbw2/hfc000/cf100/hgr0/fas24/facddd/fdi70/mqc999/mql10/mqw6/mqd98/mhc999/mhl10/mhw6/mhd98/mmc999/mml6/mmw2/mmd98/hhc2a809f/hhs2/hhl60/hhw11/hmcd3b466/hms2/hml95/hmw11/hsv0"], //source of the URL to be displayed
+			scrolling: "no", // allow scrolling or not. html 4 only
+			shutoffDelay: 10000, //delay in miliseconds to video shut-off while using together with MMM-PIR-Sensor 
+			displayLastUpdate: false	
+			}
+	},
+	
+		//{
+			//module: "calendar",
+			//header: "Marital Bliss",
+			//position: "top_left",
+			//config: {
+				//calendars: [
+					//{
+						//symbol: "calendar-check",
+						//url: "webcal://p34-caldav.icloud.com/published/2/MTQ4NDY2MDQxNDg0NjYwNHIQjmzVOG7QeW56qx71ZvWPMXpX2X0BWnCG8i0Xpi8gv4S6eg9WWDcfjOaT4T8ExYyrJbfzHTB-iykS1tW0shM"
+					//}
+				//]
+			//}
+		//},
+		{
+		  module: 'MMM-CalendarExt2',
+		  config: {
+			calendars : [
+			  {
+				url: "webcal://p34-caldav.icloud.com/published/2/MTQ4NDY2MDQxNDg0NjYwNHIQjmzVOG7QeW56qx71ZvWPMXpX2X0BWnCG8i0Xpi8gv4S6eg9WWDcfjOaT4T8ExYyrJbfzHTB-iykS1tW0shM",
+			  },
+			],
+			views: [
+			  {
+				name:"main",
+				mode: "daily",
+				title: "Family Calendar",
+				position: "bottom_left"
+			  },
+			  {
+				name:"reminders",
+				mode: "current",
+				title: "Reminders",
+				position: "bottom_right"
+			  },
+			],
+			scenes: [
+			  {
+				name: "DEFAULT",
+			  },
+			],
+		  },
+		},
+		
+
+
+		{
+		  module: "MMM-OpenWeatherMapForecast",
+		  header: "Current Weather",
+		  position: "top_right",
+		  classes: "default everyone current-weather",
+		  disabled: false,
+		  config: {
+		    apikey: "ba8b3da799c58e26945eda0f4be85702",
+		    latitude: "40.37165",
+		    longitude: "-80.03264",      
+		    iconset: "1c",
+		    mainIconset: "1c",
+		    colored: true,
+		    useAnimatedIcons: false,
+		    showInlineIcons: true,
+		    concise: true,
+		    forecastLayout: "tiled",
+		    forecastHeaderText: "Afternoon Forecast",
+		    showForecastTableColumnHeaderIcons: false,
+		    showHourlyForecast: true,
+		    hourlyForecastInterval: 1,
+		    maxHourliesToShow: 3,
+		    showDailyForecast: false,
+		  }
+		},
+		{
+		  module: "MMM-OpenWeatherMapForecast",
+		  position: "top_right",
+		  classes: "default everyone current-weather",
+		  disabled: false,
+		  config: {
+		    apikey: "ba8b3da799c58e26945eda0f4be85702",
+		    latitude: "40.37165",
+		    longitude: "-80.03264",      
+		    iconset: "1c",
+		    mainIconset: "1c",
+		    useAnimatedIcons: false,
+		    concise: true,
+		    showCurrentConditions: false,
+		    showExtraCurrentConditions: false,
+		    showSummary: false,
+		    forecastLayout: "table",
+		    forecastHeaderText: "Weekly Forecast",
+		    showForecastTableColumnHeaderIcons: true,
+		    showHourlyForecast: false,
+		    showDailyForecast: true,
+		    maxDailiesToShow: "5",
+		  }
+		},
+		//{
+			//module: "weather",
+			//position: "top_right",
+			//header: "Hourly Forecast",
+			//config: {
+				//type: "hourly",
+				//weatherProvider: "weathergov",
+				//apiBase: "https://api.weather.gov/points/",
+				//tableClass: "medium",
+				//lat: 40.37165,
+				//lon: -80.03264,
+				//roundTemp: true,
+				//fade: false,
+				//appendLocationNameToHeader: false
+			//}
+		//},
+		//{
+			//module: "weather",
+			//position: "top_right",
+			//header: "5-Day Forecast",
+			//config: {
+				//type: "forecast",
+				//tableClass: "medium",
+				//weatherProvider: "weathergov",
+				//apiBase: "https://api.weather.gov/points/",
+				//lat: 40.37165,
+				//lon: -80.03264,
+				//roundTemp: true,
+				//fade: false,
+				//appendLocationNameToHeader: false
+			//}
+		//},
+		{
+			module: "newsfeed",
+			position: "bottom_bar",
+			config: {
+				showAsList: true,
+				animationSpeed: 0,
+				showSourceTitle: false, 
+				isWeatherAlert: true,
+				prohibitedWords: ['There are no active'],
+				feeds: [
+					{
+						title: "National Weather Service",
+						url: "https://alerts.weather.gov/cap/wwaatmget.php?x=PAZ021"
+					}
+				]
+			}
+		},
+		
+		
+
+	]
+};
+
+/*************** DO NOT EDIT THE LINE BELOW ***************/
+if (typeof module !== "undefined") {module.exports = config;}
